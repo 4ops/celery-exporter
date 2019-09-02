@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: celery-metrics
+spec:
+  endpoints:
+    - interval: 30s
+      port: metrics
+      path: /metrics
+      timeout: 2s
+  namespaceSelector:
+    matchNames:
+      - development
+      - staging
+      - production
+  selector:
+    matchLabels:
+      app: celery-prometheus-exporter
