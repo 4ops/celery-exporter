@@ -58,7 +58,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1567459030263,
+  "iteration": 1567461167163,
   "links": [],
   "panels": [
     {
@@ -126,7 +126,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(celery_tasks{state=\"PENDING\",namespace=\"$namespace\"})",
+          "expr": "sum(celery_tasks{state=\"PENDING\",namespace=\"$namespace\",microservice=~\"$microservice\"})",
           "hide": false,
           "instant": true,
           "refId": "A"
@@ -212,7 +212,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(celery_tasks{state=\"STARTED\",namespace=\"$namespace\"})",
+          "expr": "sum(celery_tasks{state=\"STARTED\",namespace=\"$namespace\",microservice=~\"$microservice\"})",
           "hide": false,
           "instant": true,
           "refId": "A"
@@ -300,7 +300,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "1 - sum(celery_tasks{state=\"FAILURE\",namespace=\"$namespace\"}) / sum(celery_tasks{state=\"SUCCESS\",namespace=\"$namespace\"})",
+          "expr": "1 - sum(celery_tasks{state=\"FAILURE\",namespace=\"$namespace\",microservice=~\"$microservice\"}) / sum(celery_tasks{state=\"SUCCESS\",namespace=\"$namespace\",microservice=~\"$microservice\"})",
           "hide": false,
           "instant": true,
           "intervalFactor": 1,
@@ -386,7 +386,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "topk(1,task:celery_failure_tasks{namespace=\"$namespace\"}) > 0",
+          "expr": "topk(1,task:celery_failure_tasks{namespace=\"$namespace\",microservice=~\"$microservice\"}) > 0",
           "instant": true,
           "legendFormat": "{{ name }}",
           "refId": "A"
@@ -1256,5 +1256,5 @@
   "timezone": "",
   "title": "Celery tasks",
   "uid": "P4OXH9FWz",
-  "version": 17
+  "version": 21
 }
