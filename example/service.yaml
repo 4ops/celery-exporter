@@ -1,6 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
+  labels:
+    app: celery-prometheus-exporter
+    microservice: some-app-name
   name: celery-metrics
 spec:
   ports:
@@ -10,5 +13,6 @@ spec:
       targetPort: 8888
   selector:
     app: celery-prometheus-exporter
+    microservice: some-app-name
   sessionAffinity: None
   type: ClusterIP

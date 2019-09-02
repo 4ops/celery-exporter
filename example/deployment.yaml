@@ -1,14 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: celery-prometheus-exporter
   name: celery-metrics
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: celery-prometheus-exporter
+      microservice: some-app-name
   strategy:
     type: Recreate
   template:
@@ -20,6 +19,7 @@ spec:
       creationTimestamp: null
       labels:
         app: celery-prometheus-exporter
+        microservice: some-app-name
     spec:
       containers:
         - env:

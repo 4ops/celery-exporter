@@ -2,6 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: celery-metrics
+  namespace: monitoring
 spec:
   endpoints:
     - interval: 30s
@@ -16,3 +17,5 @@ spec:
   selector:
     matchLabels:
       app: celery-prometheus-exporter
+  targetLabels:
+    - microservice
