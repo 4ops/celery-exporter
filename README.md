@@ -12,4 +12,4 @@ Original [project repo](https://github.com/zerok/celery-prometheus-exporter.git)
 - [grafana] dashboard
 
 [kubernetes]: https://github.com/4ops/celery-exporter/tree/master/examples/kubernetes
-[garafana]: https://github.com/4ops/celery-exporter/blob/master/examples/grafana/dashboard.json
+[grafana]: https://github.com/4ops/celery-exporter/blob/master/examples/grafana/dashboard.json
