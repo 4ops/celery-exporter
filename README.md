@@ -5,6 +5,11 @@
 Celery metrics exporter for Prometheus.
 
 Original [project repo](https://github.com/zerok/celery-prometheus-exporter.git).
-Example kubernetes manifests in [example].
 
-[example]: example
+## Examples
+
+- [kubernetes] manifests
+- [grafana] dashboard
+
+[kubernetes]: https://github.com/4ops/celery-exporter/tree/master/examples/kubernetes
+[garafana]: https://github.com/4ops/celery-exporter/blob/master/examples/garafana/dashboard.json

@@ -1,6 +1,6 @@
 .gitignore
 .dockerignore
-example
+examples
 Dockerfile
 LICENSE
 *.md

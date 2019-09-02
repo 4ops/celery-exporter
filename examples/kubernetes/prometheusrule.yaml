@@ -12,6 +12,8 @@ spec:
       rules:
         - expr: sum(celery_tasks{state="FAILURE"}) without (instance,pod,endpoint)
           record: service:celery_failure_tasks
+        - expr: sum(celery_tasks{state="SUCCESS"}) without (instance,pod,endpoint)
+          record: service:celery_success_tasks
         - alert: CeleryErrors
           expr: rate(service:celery_failure_tasks[5m]) > 0.1
           for: 10m
