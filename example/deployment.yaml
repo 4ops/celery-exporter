@@ -34,7 +34,7 @@ spec:
             failureThreshold: 2
             successThreshold: 2
             httpGet:
-              scheme: http
+              scheme: HTTP
               path: /metrics
               port: metrics
           name: exporter
