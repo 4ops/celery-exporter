@@ -1,2 +1,6 @@
+.gitignore
+.dockerignore
 example
 Dockerfile
+LICENSE
+*.md
