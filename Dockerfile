@@ -7,6 +7,8 @@ ARG VERSION
 # hadolint ignore=DL3008
 RUN set -eux \
   \
+  ; export VERSION=$(echo ${VERSION} | grep -oE '[0-9.]+') \
+  \
   ; useradd \
       --comment "Celery Exporter Application" \
       --home-dir /home/celery-exporter \
