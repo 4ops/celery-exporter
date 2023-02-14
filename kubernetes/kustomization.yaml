@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - application
+  - config
+  - prometheus
+
+commonLabels:
+  app.kubernetes.io/name: celery-exporter
+
+images:
+  - name: 4ops/celery-exporter
+    newName: ghcr.io/4ops/celery-exporter
+    newTag: 1.5.1

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: celery-exporter
+  name: celery-exporter
+spec:
+  ports:
+    - name: metrics
+      port: 9540
+      protocol: TCP
+      targetPort: 9540
+  selector:
+    app.kubernetes.io/name: celery-exporter
+  sessionAffinity: None
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
