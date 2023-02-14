@@ -1,0 +1,19 @@
+{{- if .Values.serviceMonitor.create -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "celery-exporter.fullname" . }}
+  {{- if .Values.serviceMonitor.namespace }}
+  namespace: {{ .Values.serviceMonitor.namespace }}
+  {{- end }}
+  labels:
+    {{- include "celery-exporter.labels" . | nindent 4 }}
+spec:
+  endpoints:
+    - interval: {{ .Values.serviceMonitor.scrapeInterval }}
+      port: metrics
+      path: /metrics
+  selector:
+    matchLabels:
+      {{- include "celery-exporter.selectorLabels" . | nindent 6 }}
+{{- end -}}

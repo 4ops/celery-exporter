@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "celery-exporter.fullname" . }}
+  labels:
+    {{- include "celery-exporter.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "celery-exporter.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "celery-exporter.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "celery-exporter.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: CELERY_EXPORTER_BROKER_URL
+              value: {{ required "Broker URL must be set" .Values.brokerUrl | toString | quote }}
+            - name: CELERY_EXPORTER_LISTEN_ADDRESS
+              value: {{ printf "0.0.0.0:%d" (int .Values.containerPort) | toString | quote }}
+            - name: CELERY_EXPORTER_MAX_TASKS
+              value: {{ .Values.maxTasks | int | toString | quote }}
+            - name: CELERY_EXPORTER_NAMESPACE
+              value: {{ .Values.namespace | default .Release.Namespace | toString | quote }}
+          ports:
+            - name: metrics
+              containerPort: {{ int .Values.containerPort | toString }}
+              protocol: TCP
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 2
+            successThreshold: 2
+            httpGet:
+              scheme: HTTP
+              path: /metrics
+              port: metrics
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
