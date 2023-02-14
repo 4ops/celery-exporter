@@ -4,6 +4,7 @@ FROM docker.io/library/python:3.6-slim
 
 ARG VERSION
 
+# hadolint ignore=DL3008
 RUN set -eux \
   \
   ; useradd \
