@@ -4,10 +4,10 @@ FROM docker.io/library/python:3.6-slim
 
 ARG VERSION
 
-# hadolint ignore=DL3008
+# hadolint ignore=DL3008,DL4006,SC2086
 RUN set -eux \
   \
-  ; export VERSION=$(echo ${VERSION} | grep -oE '[0-9.]+') \
+  ; export VERSION=$(echo "${VERSION}" | grep -oE '[0-9.]+') \
   \
   ; useradd \
       --comment "Celery Exporter Application" \
