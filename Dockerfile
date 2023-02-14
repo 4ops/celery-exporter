@@ -1,26 +1,59 @@
-FROM 4ops/python:3.7
+ARG VERSION="1.5.1"
 
-RUN set -ex; \
-    \
-    pip install \
-    --no-cache-dir \
-    --disable-pip-version-check \
-    \
-    amqp==2.5.1 \
-    billiard==3.6.1.0 \
-    celery==4.3.0 \
-    celery-prometheus-exporter==1.7.0 \
-    importlib-metadata==0.20 \
-    kombu==4.6.4 \
-    more-itertools==7.2.0 \
-    prometheus_client==0.7.1 \
-    pytz==2019.2 \
-    redis==3.3.8 \
-    vine==1.3.0 \
-    zipp==0.6.0 \
-    ; \
-    celery-prometheus-exporter --version
+FROM docker.io/library/python:3.6-slim
 
-USER app
-EXPOSE 8888
-CMD ["celery-prometheus-exporter"]
+ARG VERSION
+
+RUN set -eux \
+  \
+  ; useradd \
+      --comment "Celery Exporter Application" \
+      --home-dir /home/celery-exporter \
+      --create-home \
+      --uid 1042 \
+      --user-group \
+      celery-exporter \
+  \
+  ; apt-get -q update \
+  ; apt-get -qy install --no-install-recommends wget \
+  \
+  ; wget -qO base.txt https://raw.githubusercontent.com/OvalMoney/celery-exporter/${VERSION}/requirements/base.txt \
+  ; wget -qO requirements.txt https://raw.githubusercontent.com/OvalMoney/celery-exporter/${VERSION}/requirements/requirements.txt \
+  \
+  ; export PYTHONDONTWRITEBYTECODE=1 \
+  ; export PYTHONUNBUFFERED=1 \
+  \
+  ; pip install \
+      --disable-pip-version-check \
+      --no-cache-dir \
+      --no-color \
+      --no-input \
+      -r requirements.txt \
+  \
+  ; pip install \
+      --disable-pip-version-check \
+      --no-cache-dir \
+      --no-color \
+      --no-input \
+      \
+      celery-exporter==${VERSION} \
+  \
+  ; celery-exporter --verbose --version \
+  \
+  ; apt-get -qy purge wget \
+  ; apt-get -qy autoremove \
+  ; rm -rf \
+      base.txt \
+      requirements.txt \
+      ~/.cache \
+      ~/.bash_history \
+      ~/.wget-hsts \
+      /var/lib/apt/lists/* \
+      /home/celery-exporter/.bash_logout
+
+USER 1042:1042
+
+EXPOSE 9540
+
+ENTRYPOINT ["celery-exporter"]
+CMD []
